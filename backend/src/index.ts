@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import type { Books } from "./type/books.js";
+import { cors } from "hono/cors";
 
 const app = new Hono();
 
@@ -12,6 +13,18 @@ const books: Books[] = [
 ];
 
 // const books: Books[] = [];
+
+app.use(
+  "/*",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    exposeHeaders: ["Content-Type"],
+    maxAge: 3600,
+    credentials: true,
+  })
+);
 
 app.get("/books", async (c) => {
   const query = c.req.query();
