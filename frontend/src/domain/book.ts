@@ -16,5 +16,9 @@ type BooksJson = {
   complete: boolean;
 };
 
-export type { BooksJson };
+type BookState = {
+  allBooks: Books[];
+};
+
+export type { BooksJson, BookState };
 export { Books };
