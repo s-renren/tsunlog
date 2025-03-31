@@ -123,6 +123,8 @@ function App() {
               return (
                 <li key={book.id} onClick={() => handleClick(book.id)}>
                   {book.name}
+                  本:{book.pages}ページ 今:{book.nowPage}ページ 現在:
+                  {book.complete ? "完了" : "未完了"}
                   <form action={updateBookState}>
                     <input type="hidden" name="formType" value="update" />
                     <input type="hidden" name="id" value={book.id} />
