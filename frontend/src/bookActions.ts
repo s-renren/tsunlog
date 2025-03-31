@@ -63,3 +63,44 @@ export const handleSearchBooks = async (
     keyword,
   };
 };
+
+export const handleUpdateBook = async (
+  prevState: BookState,
+  formData: FormData
+): Promise<BookState> => {
+  const id: number = Number(formData.get("id"));
+  const name: string = formData.get("bookName") as string;
+  const pages: number = Number(formData.get("pages"));
+  const nowPage: number = Number(formData.get("nowPage"));
+  const complete: boolean = formData.has("complete");
+
+  const response = await fetch(`http://localhost:8080/books/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      pages,
+      nowPage,
+      complete,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update book");
+  }
+  const updatedBook = await response.json();
+  const updatedBooks = prevState.allBooks.map((book) =>
+    book.id === id ? updatedBook : book
+  );
+  const filteredBooks = prevState.filteredBooks?.map((book) =>
+    book.id === id ? updatedBook : book
+  );
+
+  return {
+    ...prevState,
+    allBooks: updatedBooks,
+    filteredBooks: filteredBooks || null,
+  };
+};

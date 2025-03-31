@@ -63,6 +63,7 @@ app.post("/books", async (c) => {
 app.put("books/:id", async (c) => {
   const id = c.req.param("id");
   const body = await c.req.json();
+  const name = body.name;
   const pages = body.pages;
   const nowPage = body.nowPage;
   const complete = body.complete;
@@ -72,6 +73,7 @@ app.put("books/:id", async (c) => {
     return c.json({ error: "書籍が見つかりません" }, 404);
   }
 
+  book.name = name;
   book.pages = pages;
   book.nowPage = nowPage;
   book.complete = complete;
