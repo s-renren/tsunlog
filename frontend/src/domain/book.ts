@@ -18,6 +18,8 @@ type BooksJson = {
 
 type BookState = {
   allBooks: Books[];
+  filteredBooks: Books[] | null;
+  keyword: string;
 };
 
 export type { BooksJson, BookState };

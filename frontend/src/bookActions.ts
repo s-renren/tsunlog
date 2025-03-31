@@ -1,6 +1,6 @@
-import { BooksJson, BookState } from "./domain/book";
+import { Books, BooksJson, BookState } from "./domain/book";
 
-const handleAddBook = async (
+export const handleAddBook = async (
   prevState: BookState,
   formData: FormData
 ): Promise<BookState> => {
@@ -33,7 +33,33 @@ const handleAddBook = async (
   return {
     ...prevState,
     allBooks: [...prevState.allBooks, newBook],
+    filteredBooks: prevState.filteredBooks
+      ? [...prevState.filteredBooks, newBook]
+      : null,
   };
 };
 
-export default handleAddBook;
+export const handleSearchBooks = async (
+  prevState: BookState,
+  formData: FormData
+): Promise<BookState> => {
+  const keyword = formData.get("keyword") as string;
+  if (!keyword) {
+    throw new Error("Invalid form data");
+  }
+
+  const response = await fetch(
+    `http://localhost:8080/books?keyword=${keyword}`
+  );
+  const data = (await response.json()) as BooksJson[];
+  const filteredBooks = data.map(
+    (book) =>
+      new Books(book.id, book.name, book.pages, book.nowPage, book.complete)
+  );
+
+  return {
+    ...prevState,
+    filteredBooks,
+    keyword,
+  };
+};
