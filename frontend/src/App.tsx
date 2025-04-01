@@ -71,64 +71,133 @@ function App() {
 
   return (
     <>
-      <div>
-        <form action={updateBookState} ref={addFormRef}>
+      <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
+        <form
+          action={updateBookState}
+          ref={addFormRef}
+          className="mb-6 space-y-4"
+        >
           <input type="hidden" name="formType" value="add" />
-          <input type="text" name="bookName" placeholder="書籍名" />
-          <input type="number" name="bookPages" placeholder="ページ数" />
-          <button type="submit" disabled={isPending}>
+          <input
+            type="text"
+            name="bookName"
+            placeholder="書籍名"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="number"
+            name="bookPages"
+            placeholder="ページ数"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+          >
             追加
           </button>
         </form>
-        <form ref={searchRef} action={updateBookState}>
+
+        <form
+          ref={searchRef}
+          action={updateBookState}
+          className="mb-6 space-y-4"
+        >
           <input type="hidden" name="formType" value="search" />
-          <input type="text" name="keyword" placeholder="書籍名で検索" />
-          <button type="submit" disabled={isPending}>
+          <input
+            type="text"
+            name="keyword"
+            placeholder="書籍名で検索"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
+          >
             検索
           </button>
         </form>
+
         {isClick && selectedBook && (
-          <form id="formContent" action={updateBookState}>
+          <form
+            id="formContent"
+            action={updateBookState}
+            className="mb-6 space-y-4 p-4 bg-gray-100 rounded-md"
+          >
             <input type="hidden" name="formType" value="update" />
             <input type="hidden" name="id" value={selectedBook.id} />
             <input
               type="text"
               name="bookName"
               defaultValue={selectedBook.name}
+              className="w-full p-2 border rounded"
             />
             <input
               type="number"
               name="pages"
               defaultValue={selectedBook.pages}
+              className="w-full p-2 border rounded"
             />
             <input
               type="number"
               name="nowPage"
               defaultValue={selectedBook.nowPage}
+              className="w-full p-2 border rounded"
             />
-            <input
-              type="checkbox"
-              name="complete"
-              defaultChecked={selectedBook.complete}
-            />
-            <label htmlFor="bookComplete">完了</label>
-            <button type="submit" disabled={isPending}>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                name="complete"
+                defaultChecked={selectedBook.complete}
+              />
+              <label htmlFor="bookComplete">完了</label>
+            </div>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="w-full p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 disabled:opacity-50"
+            >
               更新
             </button>
           </form>
         )}
+
         <div>
-          <ul>
+          <ul className="space-y-4">
             {books?.map((book: Books) => {
+              const remainingPages = book.pages - book.nowPage;
+              const progress = Math.round((book.nowPage / book.pages) * 100);
+
               return (
-                <li key={book.id} onClick={() => handleClick(book.id)}>
-                  {book.name}
-                  本:{book.pages}ページ 今:{book.nowPage}ページ 現在:
-                  {book.complete ? "完了" : "未完了"}
-                  <form action={updateBookState}>
-                    <input type="hidden" name="formType" value="update" />
-                    <input type="hidden" name="id" value={book.id} />
-                  </form>
+                <li
+                  key={book.id}
+                  onClick={() => handleClick(book.id)}
+                  className="p-4 bg-gray-100 rounded-md shadow cursor-pointer hover:bg-gray-200 transition"
+                >
+                  <span className="font-bold">{book.name}</span> - {book.pages}
+                  ページ
+                  <br />
+                  <span className="text-sm text-gray-600">
+                    現在: {book.nowPage}ページ | 残り: {remainingPages}ページ
+                  </span>
+                  <span
+                    className={`ml-2 font-bold ${
+                      book.complete ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {book.complete ? "完了" : "未完了"}
+                  </span>
+                  <div className="mt-2 h-3 w-full bg-gray-300 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-gray-500">
+                    {progress}% 完了
+                  </span>
                 </li>
               );
             })}
