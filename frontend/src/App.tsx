@@ -147,6 +147,7 @@ function App() {
               name="nowPage"
               defaultValue={selectedBook.nowPage}
               min="0"
+              max={selectedBook.pages}
               className="w-full p-2 border rounded"
             />
             <div className="flex items-center space-x-2">
