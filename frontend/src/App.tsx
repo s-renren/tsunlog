@@ -88,6 +88,7 @@ function App() {
             type="number"
             name="bookPages"
             placeholder="ページ数"
+            min="0"
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
@@ -138,12 +139,14 @@ function App() {
               type="number"
               name="pages"
               defaultValue={selectedBook.pages}
+              min="0"
               className="w-full p-2 border rounded"
             />
             <input
               type="number"
               name="nowPage"
               defaultValue={selectedBook.nowPage}
+              min="0"
               className="w-full p-2 border rounded"
             />
             <div className="flex items-center space-x-2">
@@ -187,7 +190,7 @@ function App() {
                       book.complete ? "text-green-500" : "text-red-500"
                     }`}
                   >
-                    {book.complete ? "完了" : "未完了"}
+                    {book.complete ? "読了" : "未読了"}
                   </span>
                   <div className="mt-2 h-3 w-full bg-gray-300 rounded-full overflow-hidden">
                     <div
